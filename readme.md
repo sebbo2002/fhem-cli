@@ -5,7 +5,9 @@
 # fhem-cli
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Status](https://git-badges.sebbo.net/94/master/build)](https://git.sebbo.net/sebbo2002/gitlab-badges/pipelines)
+[![Status](https://git-badges.sebbo.net/94/master/build)](https://static.sebbo.net/fhem-cli/test/report.html)
+[![Coverage](https://git-badges.sebbo.net/94/master/coverage)](https://static.sebbo.net/fhem-cli/coverage/index.html)
+
 
 ## ⚠️ Warning
 This is a very early beta. Please do a FHEM backup before you use this tool. Thank you.

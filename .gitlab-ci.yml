@@ -62,6 +62,17 @@ node_10:
     - npm install
     - npm test
 
+node_report:
+  stage: test
+  tags:
+    - matt.sebbo.net
+    - ssh
+  script:
+    - yarn install
+    - npm tests
+    - rm -rf /var/docker/static/fhem-cli/*
+    - mv ./test-result/* /var/docker/static/fhem-cli/
+
 publish_github:
   stage: publish
   tags:
@@ -82,7 +93,6 @@ publish_npm_next:
     - npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
     - yarn install
     - npm run bump:develop
-    - npm run build
     - npm publish --tag "next"
   only:
     - develop
@@ -96,7 +106,6 @@ publish_npm:
     - npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
     - yarn install
     - npm run bump:production
-    - npm run build
     - npm publish
   only:
     - master
