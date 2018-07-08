@@ -1,0 +1,41 @@
+{
+  "name": "@sebbo2002/fhem-cli",
+  "description": "My small toolbox I use do configure and manage FHEM…",
+  "scripts": {
+    "all": "npm run check && npm run tests",
+    "check": "npm run check:eslint",
+    "check:eslint": "eslint ./src ./test/spec/*.js",
+    "tests": "npm run test && npm run coverage",
+    "test": "mocha -c --reporter mochawesome --reporter-options reportDir=test-result/test,reportFilename=report,json=false ./test/spec/*.js",
+    "coverage": "nyc --reporter=html --reporter=text --report-dir ./test-result/coverage --check-coverage mocha -c ./test/spec/*.js",
+    "bump:reset": "export MODULEVERSION=$(npm view ical-generator version | echo 0.0.0) && npm run bump:reset:save",
+    "bump:reset:next": "export MODULEVERSION=$(npm view ical-generator@next version | echo 0.0.0) && npm run bump:reset:save",
+    "bump:reset:save": "echo $MODULEVERSION && npm --no-git-tag-version version ${MODULEVERSION}",
+    "bump:develop": "npm run bump:reset:next && npm --no-git-tag-version version pre${BUMP}",
+    "bump:production": "npm run bump:reset && npm --no-git-tag-version version ${BUMP}"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sebbo2002/fhem-cli.git"
+  },
+  "keywords": [
+    "fhem",
+    "cli",
+    "commandline",
+    "home",
+    "automation"
+  ],
+  "author": "Sebastian Pekarek <mail@sebbo.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sebbo2002/fhem-cli/issues"
+  },
+  "homepage": "https://github.com/sebbo2002/fhem-cli#readme",
+  "devDependencies": {
+    "eslint": "^5.0.1",
+    "jshint": "^2.9.5",
+    "mocha": "^5.2.0",
+    "mochawesome": "^3.0.2",
+    "nyc": "^12.0.2"
+  }
+}

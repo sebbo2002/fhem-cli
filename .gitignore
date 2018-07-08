@@ -1,0 +1,4 @@
+/node_modules/
+/test-result
+/.nyc_output
+/.idea
