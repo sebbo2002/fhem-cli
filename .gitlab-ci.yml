@@ -69,7 +69,7 @@ node_report:
     - ssh
   script:
     - yarn install
-    - npm tests
+    - npm run tests
     - rm -rf /var/docker/static/fhem-cli/*
     - mv ./test-result/* /var/docker/static/fhem-cli/
 
