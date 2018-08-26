@@ -5,6 +5,7 @@
 # FHEM CLI
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
+![Status](https://git-badges.sebbo.net/94/master/build)
 
 
 ## ⚠️ Warning
