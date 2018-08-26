@@ -2,16 +2,15 @@
   <img width="140" height="140" src="https://d.sebbo.net/tools-NsTkJ9Zqkg.svg">
 </p>
 
-# fhem-cli
+# FHEM CLI
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Status](https://git-badges.sebbo.net/94/master/build)](https://static.sebbo.net/fhem-cli/test/report.html)
 
 
 ## ⚠️ Warning
 This is a very early beta. Please do a FHEM backup before you use this tool. Thank you.
 
-## Installation
+## 🔧 Installation
 
 `fhem-cli` is written in JavaScript. If you have already installed node.js, you can use `npm` to install `fhem-cli` as well.
 ```bash
@@ -19,10 +18,10 @@ This is a very early beta. Please do a FHEM backup before you use this tool. Tha
 npm i -g @sebbo2002/fhem-cli
 ```
 
-~~If you don't want to install `node`, you can also have a look on [the releases page](https://github.com/sebbo2002/fhem-cli/releases), where some precompiled binaries are ready to be used.~
+~~If you don't want to install `node`, you can also have a look on [the releases page](https://github.com/sebbo2002/fhem-cli/releases), where some precompiled binaries are ready to be used.~~ (This is not done yet. Need this? Please shout at me [over here](https://github.com/sebbo2002/fhem-cli/issues/8).)
 
 
-## Quick Start
+## ⚡️ Quick Start
 
 ```bash
 # create a new, empty project directory
@@ -42,23 +41,71 @@ fhem push
 ```
 
 
-## All Commands
+## 📑 All Commands
 
-### `fhem init`
+#### `fhem init`
+Starts an interactive wizard which configures FHEM CLI to connect to your FHEM instance. 
 
-### `fhem pull`
+#### `fhem pull`
+Compare local and remote and updates your local files to match your remote.
 
-### `fhem push`
+#### `fhem push`
+Compare local and remote and updates your remote instance to match your local files.
 
-### `fhem inform`
+#### `fhem inform [regexp]`
+Just proxies FHEM inform, so you can have a look at your instance's events.
 
 
+## 🔁 Setup Homebridge restart
 
-## Credits
+FHEM CLI allows you to setup hooks. These hooks are then called, when a given attribute changes value. You can use this feature to restart Homebridge when it's configuration changes.
+
+To do this, you need to create a new bash file on your computer running FHEM. Running this file will restart your Homebridge:
+
+```bash
+#!/usr/bin/env bash
+su fhem -c 'forever restartall'
+```
+
+When you do not login via root, you need to make this file executable without entering a password. To do this, we need to setup some permissions:
+
+```bash
+sudo chown root:root restart-homebridge.sh
+sudo chmod 4775 restart-homebridge.sh
+```
+
+We also need an entry in our `/etc/sudoers` file:
+
+```bash
+sebbo ALL=(ALL) NOPASSWD: /home/batman/restart-homebridge.sh
+```
+
+Cool. Now it should be possible to restart Homebridge like this:
+
+```bash
+ssh fhem.local sudo /home/batman/restart-homebridge.sh
+```
+
+If not, something went wrong. Sorry, you have to fix this first. If this works, you can update your FHEM CLI project settings. These are located in your project directory in a file called `.fhem-cli.json`:
+
+```json
+{
+  "host": "fhem.local",
+  "port": 7072,
+  "hooks": [
+  	["homebridgeMapping", "sudo /home/batman/restart-homebridge.sh"],
+  	["room", "sudo /home/batman/restart-homebridge.sh"]
+  ]
+}
+```
+
+Now, FHEM CLI should restart Homebridge when any `room` or any `homebridgeMapping` attribute changes. Nice, isn't it?
+
+## 📚 Credits
 
 - Icons made by [Freepik](http://www.freepik.com) from [flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
 
 
-## Copyright and license
+## 👨‍🔧 Copyright and license
 
 &copy; Sebastian Pekarek under the [MIT license](LICENSE).
