@@ -1,0 +1,39 @@
+#!/usr/bin/env node
+'use strict';
+
+const app = require('commander');
+const pkg = require('../package');
+
+const Handler = require('../src/handler');
+
+app.version(pkg.version);
+
+app
+    .command('init')
+    .action(async () => {
+        const command = new Handler('init');
+        await command.run();
+    });
+
+app
+    .command('inform [regexp]')
+    .action(async regexp => {
+        const command = new Handler('inform', {regexp});
+        await command.run();
+    });
+
+app
+    .command('pull')
+    .action(async () => {
+        const command = new Handler('pull');
+        await command.run();
+    });
+
+app
+    .command('push')
+    .action(async () => {
+        const command = new Handler('push');
+        await command.run();
+    });
+
+app.parse(process.argv);

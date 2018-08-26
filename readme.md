@@ -6,7 +6,6 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 [![Status](https://git-badges.sebbo.net/94/master/build)](https://static.sebbo.net/fhem-cli/test/report.html)
-[![Coverage](https://git-badges.sebbo.net/94/master/coverage)](https://static.sebbo.net/fhem-cli/coverage/index.html)
 
 
 ## ⚠️ Warning
@@ -20,16 +19,39 @@ This is a very early beta. Please do a FHEM backup before you use this tool. Tha
 npm i -g @sebbo2002/fhem-cli
 ```
 
-If you don't want to install `node`, you can also have a look on [the releases page](https://github.com/sebbo2002/fhem-cli/releases), where some precompiled binaries are ready to be used.
+~~If you don't want to install `node`, you can also have a look on [the releases page](https://github.com/sebbo2002/fhem-cli/releases), where some precompiled binaries are ready to be used.~
 
 
 ## Quick Start
 
+```bash
+# create a new, empty project directory
+mkdir ./my-fhem && cd ./my-fhem
+
+# initialize project
+fhem init
+
+# now you should have some new files in here
+ls -la
+
+# you can always run `fhem pull` to update your local files
+fhem pull
+
+# made some changes? then push them to your FHEM instance
+fhem push
+```
+
 
 ## All Commands
 
+### `fhem init`
 
-## FAQ
+### `fhem pull`
+
+### `fhem push`
+
+### `fhem inform`
+
 
 
 ## Credits

@@ -95,7 +95,7 @@ publish_npm_next:
     - npm run bump:develop
     - npm publish --tag "next"
   only:
-    - develop
+    - master
 
 publish_npm:
   stage: publish
