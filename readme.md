@@ -8,7 +8,15 @@
 
 
 ## ⚠️ Warning
-This is a very early beta. Please do a FHEM backup before you use this tool. Thank you.
+This is a very early beta. Things will break and you don't want to loose your FHEM configuration, right? So please do a FHEM backup before you use this tool. Thank you.
+
+
+## 🤨 WTF? Why do I need a CLI for FHEM?
+- FHEM's telnet is nice to play with, but I like to have my configuration in files to version it
+- It's not allowed to edit fhem.cfg directly. Never do this at home, kids…
+- FHEM CLI syncs local configuration files with your remote FHEM instance over SSH and Telnet (SSH into machine, then telnet on localhost)
+- Bonus: FHEM CLI can also restart your Homebridge… ([?](https://github.com/sebbo2002/fhem-cli#-setup-homebridge-restart))
+
 
 ## 🔧 Installation
 
@@ -18,7 +26,7 @@ This is a very early beta. Please do a FHEM backup before you use this tool. Tha
 npm i -g @sebbo2002/fhem-cli
 ```
 
-~~If you don't want to install `node`, you can also have a look on [the releases page](https://github.com/sebbo2002/fhem-cli/releases), where some precompiled binaries are ready to be used.~~ (This is not done yet. Need this? Please shout at me [over here](https://github.com/sebbo2002/fhem-cli/issues/8).)
+~~If you don't want to install `node`, you can also have a look on [the releases page](https://github.com/sebbo2002/fhem-cli/releases), where some precompiled binaries are ready to be used.~~ (This is not done yet. Need this? Please give a 👍 [over here](https://github.com/sebbo2002/fhem-cli/issues/8).)
 
 
 ## ⚡️ Quick Start
@@ -80,7 +88,7 @@ We also need an entry in our `/etc/sudoers` file:
 sebbo ALL=(ALL) NOPASSWD: /home/batman/restart-homebridge.sh
 ```
 
-Cool. Now it should be possible to restart Homebridge like this:
+Cool. Now it should be possible to restart Homebridge from our local machine like this:
 
 ```bash
 ssh fhem.local sudo /home/batman/restart-homebridge.sh

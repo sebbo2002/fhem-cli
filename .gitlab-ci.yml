@@ -2,30 +2,6 @@ stages:
   - test
   - publish
 
-node_6:
-  image: node:6
-  services:
-    - docker:dind
-  stage: test
-  tags:
-    - matt.sebbo.net
-    - docker
-  script:
-    - npm install
-    - npm test
-
-node_7:
-  image: node:7
-  services:
-    - docker:dind
-  stage: test
-  tags:
-    - matt.sebbo.net
-    - docker
-  script:
-    - npm install
-    - npm test
-
 node_8:
   image: node:8
   services:
@@ -37,6 +13,8 @@ node_8:
   script:
     - npm install
     - npm test
+  except:
+    - tags
 
 node_9:
   image: node:9
@@ -49,6 +27,8 @@ node_9:
   script:
     - npm install
     - npm test
+  except:
+    - tags
 
 node_10:
   image: node:10
@@ -61,6 +41,8 @@ node_10:
   script:
     - npm install
     - npm test
+  except:
+    - tags
 
 node_report:
   stage: test
@@ -72,6 +54,8 @@ node_report:
     - npm run tests
     - rm -rf /var/docker/static/fhem-cli/*
     - mv ./test-result/* /var/docker/static/fhem-cli/
+  except:
+    - tags
 
 publish_github:
   stage: publish
@@ -83,19 +67,8 @@ publish_github:
     - git pull
     - git push --force "https://${GITHUB_AUTH}@github.com/sebbo2002/fhem-cli.git" --all
     - git push --force "https://${GITHUB_AUTH}@github.com/sebbo2002/fhem-cli.git" --tags
-
-publish_npm_next:
-  stage: publish
-  tags:
-    - matt.sebbo.net
-    - ssh
-  script:
-    - npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
-    - yarn install
-    - npm run bump:develop
-    - npm publish --tag "next"
-  only:
-    - master
+  except:
+    - tags
 
 publish_npm:
   stage: publish
