@@ -15,7 +15,7 @@ This is a very early beta. Things will break and you don't want to loose your FH
 ## 🤨 WTF? Why do I need a CLI for FHEM?
 - FHEM's telnet is nice to play with, but I like to have my configuration in files to version it
 - It's not allowed to edit fhem.cfg directly. Never do this at home, kids…
-- FHEM CLI syncs local configuration files with your remote FHEM instance over SSH and Telnet (SSH into machine, then telnet on localhost)
+- FHEM CLI syncs local configuration files with your remote FHEM instance over SSH and Telnet (SSH into machine, then telnet on localhost). To do this, it creates a representation of all devices and attributes and compares them. Then, a diff is created and applied locally or on your FHEM instance.
 - Bonus: FHEM CLI can also restart your Homebridge… ([?](https://github.com/sebbo2002/fhem-cli#-setup-homebridge-restart))
 
 
@@ -34,7 +34,8 @@ npm i -g @sebbo2002/fhem-cli
 
 ```bash
 # create a new, empty project directory
-mkdir ./my-fhem && cd ./my-fhem
+mkdir ./my-fhem
+cd ./my-fhem
 
 # initialize project
 fhem init
@@ -67,9 +68,9 @@ Just proxies FHEM inform, so you can have a look at your instance's events.
 
 ## 🔁 Setup Homebridge restart
 
-FHEM CLI allows you to setup hooks. These hooks are then called, when a given attribute changes value. You can use this feature to restart Homebridge when it's configuration changes.
+FHEM CLI allows you to setup hooks. These hooks are called, when a given attribute changes. You can use this feature to restart Homebridge when it's configuration changes.
 
-To do this, you need to create a new bash file on your computer running FHEM. Running this file will restart your Homebridge:
+To do this, you need to create a new bash file on your FHEM box. Running this file will restart your Homebridge:
 
 ```bash
 #!/usr/bin/env bash
@@ -112,7 +113,7 @@ Now, FHEM CLI should restart Homebridge when any `room` or any `homebridgeMappin
 
 ## 📚 Credits
 
-- Icons made by [Freepik](http://www.freepik.com) from [flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
+- Icon made by [Freepik](http://www.freepik.com) from [flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
 
 
 ## 👨‍🔧 Copyright and license
