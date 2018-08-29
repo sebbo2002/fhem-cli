@@ -82,8 +82,8 @@ class RemoteDiff {
         });
 
         this.remote.forEach(remoteDevice => {
-            const localDevice = this.local.findIndex(d => d.getName() === remoteDevice.getName());
-            if (localDevice > -1) {
+            const localDevice = this.local.find(d => d.getName() === remoteDevice.getName());
+            if (localDevice) {
                 return;
             }
 
