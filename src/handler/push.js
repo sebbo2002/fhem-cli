@@ -50,9 +50,15 @@ class PushHandler {
 
     async applyChanges () {
         const spinner = ora('Apply changes on your FHEM instance…').start();
-        await this.remoteConfig.apply(this.diff);
-        // @todo run save
-        spinner.succeed();
+        const errors = await this.remoteConfig.apply(this.diff);
+
+        if(!errors.length) {
+            spinner.succeed();
+            return;
+        }
+
+        spinner.fail('Got ' + errors.length + ' errors during push:');
+        console.log(errors.map(e => '- ' + e.toString()).join('\n'));
     }
 
     async applyHooks () {

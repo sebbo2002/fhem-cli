@@ -84,19 +84,23 @@ class RemoteSession {
 
         timeout = setTimeout(() => {
             if (!_answered) {
-                error(new Error('Timeout: FHEM did not answer within given period of time…'));
+                error(new Error('Timeout: FHEM did not answer within given period of time (Command was `' + command + '`)'));
                 answered();
             }
         }, 20000);
 
         const stdoutHandler = d => {
             d.toString().split('\n').forEach(l => {
-                if (l.trim() === 'fhem>') {
+                if(l.trim() === '>') {
+                    // ignore
+                }
+                else if (l.trim() === 'fhem>') {
                     success(result.join('').trim());
                     answered();
 
                     this._handleQueue();
-                } else {
+                }
+                else {
                     result.push(l);
                 }
             });

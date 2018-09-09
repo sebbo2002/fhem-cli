@@ -31,9 +31,9 @@ class RemoteDiff {
         this.local.forEach(localDevice => {
             const remoteDevice = this.remote.find(d => d.getName() === localDevice.getName());
 
-            // Device not given in local config.
+            // Device not given in remote config.
             // add device and all attributes…
-            if (!remoteDevice) {
+            if (!remoteDevice && localDevice.getDefinition()) {
                 this.diff.push({
                     type: 'add',
                     content: 'defmod ' + localDevice.getName() + ' ' + localDevice.getDefinition()
@@ -41,7 +41,11 @@ class RemoteDiff {
             }
 
             // device found, but definition is not up to date
-            else if (localDevice.getDefinition() !== remoteDevice.getDefinition()) {
+            else if (
+                remoteDevice &&
+                localDevice.getDefinition() !== remoteDevice.getDefinition() &&
+                localDevice.getDefinition()
+            ) {
                 this.diff.push({
                     type: 'update',
                     content: 'defmod ' + localDevice.getName() + ' ' + localDevice.getDefinition()
@@ -92,7 +96,7 @@ class RemoteDiff {
                 content: 'delete ' + remoteDevice.getName()
             });
 
-            Object.keys(localDevice.getAttibutes()).forEach(name => {
+            Object.keys(remoteDevice.getAttibutes()).forEach(name => {
                 if (this._hooks.indexOf(name) === -1) {
                     this._hooks.push(name);
                 }

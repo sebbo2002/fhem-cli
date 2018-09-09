@@ -1,5 +1,6 @@
 {
   "name": "@sebbo2002/fhem-cli",
+  "version": "0.1.3",
   "description": "My small toolbox I use do configure and manage FHEM…",
   "scripts": {
     "all": "npm run check && npm run tests",

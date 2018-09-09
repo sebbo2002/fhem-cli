@@ -158,6 +158,9 @@ class LocalConfig {
         else if (command === 'attr') {
             this._parseAttrLine(parts, file, lineDef);
         }
+        else if (command === 'set') {
+            // ignore sets for now
+        }
         else {
             throw new Error('Unable to parse line: `' + line + '` in ' + file + ':' + lineDef);
         }
