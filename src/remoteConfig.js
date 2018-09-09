@@ -56,9 +56,10 @@ class RemoteConfig {
             await this.fetch();
         }
         if(!diffs.instructions().length) {
-            return;
+            return [];
         }
 
+        const errors = [];
         const session = new RemoteSession(this.config);
         const commands = diffs.instructions().map(d => {
             if(!d.content) {
@@ -69,18 +70,27 @@ class RemoteConfig {
         });
         for(let i = 0; i < commands.length; i += 1) {
             const command = commands[i];
-            const response = await session.execute(command);
+            let response;
+
+            try {
+                response = await session.execute(command);
+            }
+            catch(err) {
+                errors.push(err);
+            }
+
             if(response) {
-                throw new Error('Unable to apply this command: `' + command + '` - FHEM answered: `' + response + '`');
+                errors.push(new Error('Unable to apply this command: `' + command + '` - FHEM answered: `' + response + '`'));
             }
         }
 
         const response = await session.execute('save');
         if(response.indexOf('Wrote configuration to ') === -1) {
-            throw new Error('Unable to apply diff: unexpected response while running `save`: `' + response + '`');
+            errors.push(new Error('Unable to apply diff: unexpected response while running `save`: `' + response + '`'));
         }
 
         session.close();
+        return errors;
     }
 }
 
