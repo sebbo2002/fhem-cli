@@ -55,7 +55,7 @@ class PushHandler {
     }
 
     async approveDiff () {
-        if (this.diff.length === 0) {
+        if (this.diff.diff.length === 0) {
             return;
         }
 
@@ -79,7 +79,7 @@ class PushHandler {
         const errors = await this.remoteConfig.apply(this.diff);
 
         if (!errors.length) {
-            spinner.succeed();
+            spinner.succeed('No changes to apply on your FHEM instance…');
             return;
         }
 
