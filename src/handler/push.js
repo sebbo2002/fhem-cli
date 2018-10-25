@@ -78,8 +78,12 @@ class PushHandler {
         const spinner = ora('Apply changes on your FHEM instance…').start();
         const errors = await this.remoteConfig.apply(this.diff);
 
-        if (!errors.length) {
+        if (!this.diff.diff.length) {
             spinner.succeed('No changes to apply on your FHEM instance…');
+            return;
+        }
+        if (!errors.length) {
+            spinner.succeed();
             return;
         }
 
