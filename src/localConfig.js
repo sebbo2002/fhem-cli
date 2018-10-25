@@ -210,7 +210,9 @@ class LocalConfig {
                     reject(err);
                 } else {
                     resolve(
-                        files.map(file => path.join(directory, file))
+                        files
+                            .filter(f => f.substr(0, 1) !== '.')
+                            .map(file => path.join(directory, file))
                     );
                 }
             });

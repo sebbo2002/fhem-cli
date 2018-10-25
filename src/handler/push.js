@@ -41,7 +41,7 @@ class PushHandler {
             this.remoteConfig.fetch()
         ]);
 
-        if(this.localConfig.parseBuffer.length) {
+        if (this.localConfig.parseBuffer.length) {
             throw new Error('Unable to parse this:\n' + this.localConfig.parseBuffer.map(l => '> ' + l).join('\n'));
         }
 
@@ -55,10 +55,10 @@ class PushHandler {
     }
 
     async approveDiff () {
-        if(this.diff.length === 0) {
+        if (this.diff.length === 0) {
             return;
         }
-        
+
         console.log('\n\n### Diff:');
         this.diff.diff.forEach(c => console.log('+ %s', c.content));
 
@@ -78,7 +78,7 @@ class PushHandler {
         const spinner = ora('Apply changes on your FHEM instance…').start();
         const errors = await this.remoteConfig.apply(this.diff);
 
-        if(!errors.length) {
+        if (!errors.length) {
             spinner.succeed();
             return;
         }
@@ -94,7 +94,7 @@ class PushHandler {
             .map(hook => hook[1])
             .filter((elem, pos, arr) => arr.indexOf(elem) === pos);
 
-        for(let i = 0; i < hooks.length; i += 1) {
+        for (let i = 0; i < hooks.length; i += 1) {
             const command = hooks[i];
             const spinner = ora('Hook: `' + command + '`').start();
 
@@ -103,7 +103,7 @@ class PushHandler {
 
             await new Promise((resolve, reject) => {
                 execFile('ssh', args, {cwd: this.cwd, env: process.env}, (err, stdout, stderr) => {
-                    if(!err) {
+                    if (!err) {
                         resolve();
                     } else {
                         console.log(stdout, stderr);
