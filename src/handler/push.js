@@ -2,6 +2,7 @@
 
 const ora = require('ora');
 const execFile = require('child_process').execFile;
+const inquirer = require('inquirer');
 
 const VersionControl = require('../versionControl');
 const Configuration = require('../configuration');
@@ -26,6 +27,7 @@ class PushHandler {
     async run () {
         await this.loadConfigs();
         await this.generateDiff();
+        await this.approveDiff();
         await this.applyChanges();
         await this.applyHooks();
         await this.commitChanges();
@@ -39,6 +41,10 @@ class PushHandler {
             this.remoteConfig.fetch()
         ]);
 
+        if(this.localConfig.parseBuffer.length) {
+            throw new Error('Unable to parse this:\n' + this.localConfig.parseBuffer.map(l => '> ' + l).join('\n'));
+        }
+
         spinner.succeed();
     }
 
@@ -46,6 +52,26 @@ class PushHandler {
         const spinner = ora('Generate diff…').start();
         this.diff = new RemoteDiff(await this.remoteConfig.devices(), await this.localConfig.devices());
         spinner.succeed();
+    }
+
+    async approveDiff () {
+        if(this.diff.length === 0) {
+            return;
+        }
+        
+        console.log('\n\n### Diff:');
+        this.diff.diff.forEach(c => console.log('+ %s', c.content));
+
+        const res = await inquirer.prompt([{
+            type: 'confirm',
+            name: 'confirm',
+            message: 'Apply diff now?',
+            default: true
+        }]);
+        if (!res.confirm) {
+            console.log('\nOkay. Bye…');
+            process.exit(1);
+        }
     }
 
     async applyChanges () {
