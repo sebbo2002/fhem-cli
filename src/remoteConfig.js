@@ -34,7 +34,14 @@ class RemoteConfig {
                 return;
             }
 
-            device.setDefinition([j.Internals.TYPE, j.Internals.DEF].join(' ').trim());
+            let def = j.Internals.DEF;
+
+            // DOIF ; Fix
+            if(j.Internals.TYPE === 'DOIF') {
+                def = def.replace(/;/g, ';;');
+            }
+
+            device.setDefinition([j.Internals.TYPE, def].join(' ').trim());
             Object.entries(j.Attributes).forEach(([name, value]) => device.setAttribute(name, value));
 
             this._devices[j.Name] = device;
