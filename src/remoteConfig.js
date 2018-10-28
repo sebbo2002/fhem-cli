@@ -41,7 +41,7 @@ class RemoteConfig {
                 def = def.replace(/;/g, ';;');
             }
 
-            device.setDefinition([j.Internals.TYPE, def].join(' ').trim());
+            device.setDefinition([j.Internals.TYPE, def].join(' ').trim().replace(/\n/g, '\\\n'));
             Object.entries(j.Attributes).forEach(([name, value]) => device.setAttribute(name, value));
 
             this._devices[j.Name] = device;
@@ -73,7 +73,7 @@ class RemoteConfig {
                 throw new Error('Unable to apply diff: no command in instruction: ' + JSON.stringify(d));
             }
 
-            return d.content.split('\n').join('\\\n');
+            return d.content.split('\n').map(s => s.substr(-1) === '\\' ? s.substr(0, s.length - 1) : s).join('\\\n');
         });
         for(let i = 0; i < commands.length; i += 1) {
             const command = commands[i];
