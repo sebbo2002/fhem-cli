@@ -128,7 +128,7 @@ class LocalConfig {
     }
 
     _parseLine (file, line, i) {
-        if (line.substr(0, 1) === '#') {
+        if (line.substr(0, 1) === '#' || line.trim().length === 0) {
             return;
         }
 
@@ -142,7 +142,7 @@ class LocalConfig {
         }
 
         const brakets = ['(', ')', '[', ']', '{', '}'].map(b => complete.split(b).length);
-        if (brakets[0] !== brakets[1] || brakets[2] !== brakets[3] || brakets[4] !== brakets[5]) {
+        if (brakets[0] !== brakets[1] || brakets[2] !== brakets[3] || brakets[4] !== brakets[5] || line.trim().substr(-1) === '\\') {
             this.parseBufferStart = this.parseBufferStart !== null ? this.parseBufferStart : i;
             this.parseBuffer.push(line);
             return;
@@ -210,7 +210,9 @@ class LocalConfig {
                     reject(err);
                 } else {
                     resolve(
-                        files.map(file => path.join(directory, file))
+                        files
+                            .filter(f => f.substr(0, 1) !== '.')
+                            .map(file => path.join(directory, file))
                     );
                 }
             });

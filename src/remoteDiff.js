@@ -70,8 +70,8 @@ class RemoteDiff {
             });
             if (remoteDevice) {
                 Object.entries(remoteDevice.getAttibutes()).forEach(([name]) => {
-                    const remoteAttr = remoteDevice ? remoteDevice.getAttibute(name) : null;
-                    if (!remoteAttr) {
+                    const localAttr = localDevice ? localDevice.getAttibute(name) : null;
+                    if (!localAttr) {
                         this.diff.push({
                             type: 'remove',
                             content: 'deleteattr ' + localDevice.getName() + ' ' + name

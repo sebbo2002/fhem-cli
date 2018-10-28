@@ -2,6 +2,7 @@
 
 const ora = require('ora');
 const execFile = require('child_process').execFile;
+const inquirer = require('inquirer');
 
 const VersionControl = require('../versionControl');
 const Configuration = require('../configuration');
@@ -26,6 +27,7 @@ class PushHandler {
     async run () {
         await this.loadConfigs();
         await this.generateDiff();
+        await this.approveDiff();
         await this.applyChanges();
         await this.applyHooks();
         await this.commitChanges();
@@ -39,6 +41,10 @@ class PushHandler {
             this.remoteConfig.fetch()
         ]);
 
+        if (this.localConfig.parseBuffer.length) {
+            throw new Error('Unable to parse this:\n' + this.localConfig.parseBuffer.map(l => '> ' + l).join('\n'));
+        }
+
         spinner.succeed();
     }
 
@@ -48,11 +54,35 @@ class PushHandler {
         spinner.succeed();
     }
 
+    async approveDiff () {
+        if (this.diff.diff.length === 0) {
+            return;
+        }
+
+        console.log('\n\n### Diff:');
+        this.diff.diff.forEach(c => console.log('+ %s', c.content));
+
+        const res = await inquirer.prompt([{
+            type: 'confirm',
+            name: 'confirm',
+            message: 'Apply diff now?',
+            default: true
+        }]);
+        if (!res.confirm) {
+            console.log('\nOkay. Bye…');
+            process.exit(1);
+        }
+    }
+
     async applyChanges () {
         const spinner = ora('Apply changes on your FHEM instance…').start();
         const errors = await this.remoteConfig.apply(this.diff);
 
-        if(!errors.length) {
+        if (!this.diff.diff.length) {
+            spinner.succeed('No changes to apply on your FHEM instance…');
+            return;
+        }
+        if (!errors.length) {
             spinner.succeed();
             return;
         }
@@ -68,7 +98,7 @@ class PushHandler {
             .map(hook => hook[1])
             .filter((elem, pos, arr) => arr.indexOf(elem) === pos);
 
-        for(let i = 0; i < hooks.length; i += 1) {
+        for (let i = 0; i < hooks.length; i += 1) {
             const command = hooks[i];
             const spinner = ora('Hook: `' + command + '`').start();
 
@@ -77,7 +107,7 @@ class PushHandler {
 
             await new Promise((resolve, reject) => {
                 execFile('ssh', args, {cwd: this.cwd, env: process.env}, (err, stdout, stderr) => {
-                    if(!err) {
+                    if (!err) {
                         resolve();
                     } else {
                         console.log(stdout, stderr);
