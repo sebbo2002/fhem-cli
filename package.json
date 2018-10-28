@@ -10,7 +10,7 @@
     "coverage": "nyc --reporter=html --reporter=text --report-dir ./test-result/coverage --check-coverage mocha -c ./test/spec/*.js",
     "bump:reset": "export MODULEVERSION=$(npm view @sebbo2002/fhem-cli version || echo 0.1.0) && npm run bump:save",
     "bump:save": "echo $MODULEVERSION && npm --no-git-tag-version version ${MODULEVERSION}",
-    "bump:production": "npm run bump:reset && npm --no-git-tag-version version from-git"
+    "bump:production": "npm run bump:reset && npm --no-git-tag-version -f version from-git"
   },
   "bin": {
     "fhem": "./bin/fhem"
