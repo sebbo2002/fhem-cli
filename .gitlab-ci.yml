@@ -70,6 +70,14 @@ publish_github:
   except:
     - tags
 
+publish_github_tags:
+  stage: publish
+  tags:
+    - matt.sebbo.net
+    - ssh
+  script:
+    - git push --force "https://${GITHUB_AUTH}@github.com/sebbo2002/fhem-cli.git" --tags
+
 publish_npm:
   stage: publish
   tags:
@@ -78,7 +86,7 @@ publish_npm:
   script:
     - npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
     - yarn install
-    - npm run bump:production
+    - npm run bump
     - npm publish
   only:
-    - master
+    - tags
