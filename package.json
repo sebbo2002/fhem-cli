@@ -3,8 +3,11 @@
   "description": "My small toolbox I use do configure and manage FHEM…",
   "scripts": {
     "all": "npm run check && npm run tests",
-    "check": "npm run check:eslint",
+    "check": "npm run check:eslint && npm run check:npm && npm run check:nsp",
     "check:eslint": "eslint ./src ./test/spec/*.js",
+    "check:quick": "npm run check:eslint && npm run check:nsp",
+    "check:nsp": "nsp check",
+    "check:npm": "npm-check -s -p",
     "tests": "npm run test && npm run coverage",
     "test": "mocha -c --reporter mochawesome --reporter-options reportDir=test-result/test,reportFilename=report,json=false ./test/spec/*.js",
     "coverage": "nyc --reporter=html --reporter=text --report-dir ./test-result/coverage --check-coverage mocha -c ./test/spec/*.js",
@@ -34,11 +37,13 @@
     "eslint": "^5.4.0",
     "mocha": "^5.2.0",
     "mochawesome": "^3.0.3",
+    "npm-check": "^5.9.0",
+    "nsp": "^3.2.1",
     "nyc": "^12.0.2"
   },
   "dependencies": {
-    "commander": "^2.17.1",
-    "inquirer": "^6.2.0",
+    "commander": "^2.19.0",
+    "inquirer": "^6.2.1",
     "ora": "^3.0.0"
   }
 }
