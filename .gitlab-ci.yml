@@ -23,7 +23,7 @@ node_9:
     - matt.sebbo.net
     - docker
   script:
-    - npm ci
+    - npm i
     - npm test
 
 node_10:
