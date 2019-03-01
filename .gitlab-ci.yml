@@ -11,7 +11,7 @@ node_8:
     - matt.sebbo.net
     - docker
   script:
-    - npm install
+    - npm ci
     - npm test
 
 node_9:
@@ -23,7 +23,7 @@ node_9:
     - matt.sebbo.net
     - docker
   script:
-    - npm install
+    - npm ci
     - npm test
 
 node_10:
@@ -35,7 +35,7 @@ node_10:
     - matt.sebbo.net
     - docker
   script:
-    - npm install
+    - npm ci
     - npm test
 
 node_report:
@@ -44,7 +44,7 @@ node_report:
     - matt.sebbo.net
     - ssh
   script:
-    - yarn install
+    - npm ci
     - npm run tests
     - rm -rf /var/docker/static/fhem-cli/*
     - mv ./test-result/* /var/docker/static/fhem-cli/
@@ -77,7 +77,7 @@ publish_npm:
     - ssh
   script:
     - npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
-    - yarn install
+    - npm ci
     - npm run bump
     - npm publish
   only:
