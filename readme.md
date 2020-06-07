@@ -9,12 +9,12 @@
 
 
 ## ⚠️ Warning
-This is a very early beta. Things will break and you don't want to loose your FHEM configuration, right? So please do a FHEM backup before you use this tool. Thank you.
+Of course this software might have bugs. So please make a backup of your configuration when you use this script. Thank you.
 
 
 ## 🤨 WTF? Why do I need a CLI for FHEM?
 - FHEM's telnet is nice to play with, but I like to have my configuration in files to version it
-- It's not allowed to edit fhem.cfg directly. Never do this at home, kids…
+- It's not allowed to edit fhem.cfg directly
 - FHEM CLI syncs local configuration files with your remote FHEM instance over SSH and Telnet (SSH into machine, then telnet on localhost). To do this, it creates a representation of all devices and attributes and compares them. Then, a diff is created and applied locally or on your FHEM instance.
 - Bonus: FHEM CLI can also restart your Homebridge… ([?](https://github.com/sebbo2002/fhem-cli#-setup-homebridge-restart))
 
@@ -54,7 +54,7 @@ fhem push
 ## 📑 All Commands
 
 #### `fhem init`
-Starts an interactive wizard which configures FHEM CLI to connect to your FHEM instance. 
+Starts an interactive wizard which configures FHEM CLI to connect to your FHEM instance.
 
 #### `fhem pull`
 Compare local and remote and updates your local files to match your remote.
@@ -114,6 +114,13 @@ Now, FHEM CLI should restart Homebridge when any `room` or any `homebridgeMappin
 ## 📚 Credits
 
 - Icon made by [Freepik](http://www.freepik.com) from [flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
+
+
+## ☁ Privacy
+
+I use a private [Sentry instance]() to which unhandled errors of this script are reported. The reported data will only
+be used to fix the bug in a future version. Reporting can be disabled by setting the environment variable `SENTRY_DSN`
+to an empty string (`SENTRY_DSN="""`).
 
 
 ## 👨‍🔧 Copyright and license

@@ -36,18 +36,6 @@ node_latest:
     - docker
   script:
     - npm ci
-    - npm test
-
-node_report:
-  stage: test
-  tags:
-    - matt.sebbo.net
-    - ssh
-  script:
-    - npm ci
-    - npm run tests
-    - rm -rf /var/docker/static/fhem-cli/*
-    - mv ./test-result/* /var/docker/static/fhem-cli/
 
 publish_github:
   stage: publish

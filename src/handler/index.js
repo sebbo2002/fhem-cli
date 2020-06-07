@@ -1,5 +1,14 @@
 'use strict';
 
+const Updater = require('../updater');
+const Sentry = require('@sentry/node');
+const pkg = require('../../package');
+if(!pkg.version && process.env.SENTRY_DSN !== '') {
+    Sentry.init({
+        dsn: process.env.SENTRY_DSN || 'https://9fd568ebebd540dfacd34984bbd82b68@sentry.sebbo.net/6'
+    });
+}
+
 /**
  * @class Handler
  */
@@ -31,11 +40,24 @@ class Handler {
             // n: list project folders, go to first if just one, otherwise ask which one to use
         }
 
+        const updateAvailablePromise = Updater.isUpdateAvailable();
+
         if(!this[this.command]) {
             throw new Error('Handler: Unable to handle command `' + this.command + '`');
         }
 
         await this[this.command]();
+
+        const updateAvailable = await updateAvailablePromise;
+        if(updateAvailable) {
+            console.log('\n');
+            console.log('⬇️  Update Available\n');
+            console.log(
+                `You use fhem-cli ${updateAvailable.installed}, but ${updateAvailable.available} is the most ` +
+                'current one.\nYou can update by running `npm i -g @sebbo2002/fhem-cli`'
+            );
+            console.log('');
+        }
     }
 
     async init () {

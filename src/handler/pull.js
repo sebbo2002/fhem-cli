@@ -1,6 +1,7 @@
 'use strict';
 
 const ora = require('ora');
+const inquirer = require('inquirer');
 
 const VersionControl = require('../versionControl');
 const Configuration = require('../configuration');
@@ -26,6 +27,7 @@ class PullHandler {
         await this.checkStash();
         await this.loadConfigs();
         await this.generateDiff();
+        await this.approveDiff();
         await this.applyChanges();
     }
 
@@ -54,6 +56,32 @@ class PullHandler {
         const spinner = ora('Generate diff…').start();
         this.diff = new LocalDiff(this.cwd, await this.remoteConfig.devices(), await this.localConfig.devices());
         spinner.succeed();
+    }
+
+    async approveDiff () {
+        if (this.diff.diff.length === 0) {
+            return;
+        }
+
+        console.log('\n\n### Diff:');
+        this.diff.diff.forEach(c => {
+            console.log(`\n#### ${c.file}`);
+
+            const prefix = c.type === 'remove' ? '- ' : '+ ';
+            console.log(prefix + c.content.replace(/\n/g, '\n' + prefix));
+        });
+
+        console.log('');
+        const res = await inquirer.prompt([{
+            type: 'confirm',
+            name: 'confirm',
+            message: 'Apply diff now?',
+            default: true
+        }]);
+        if (!res.confirm) {
+            console.log('\nOkay. Bye…');
+            process.exit(1);
+        }
     }
 
     async applyChanges () {
