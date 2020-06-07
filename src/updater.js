@@ -11,10 +11,7 @@ class Updater {
     static async isUpdateAvailable () {
         const installed = pkg.version || null;
         if (!installed) {
-            return {
-                installed: '1.2.1',
-                available: '1.2.4'
-            };
+            return false;
         }
 
         try {
