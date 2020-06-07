@@ -42,6 +42,7 @@
     "nyc": "^15.0.0"
   },
   "dependencies": {
+    "@sentry/node": "^5.16.1",
     "commander": "^4.1.1",
     "inquirer": "^7.0.4",
     "ora": "^4.0.3"

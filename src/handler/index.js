@@ -1,5 +1,10 @@
 'use strict';
 
+const Sentry = require('@sentry/node');
+Sentry.init({
+    dsn: process.env.SENTRY_DSN || 'https://9fd568ebebd540dfacd34984bbd82b68@sentry.sebbo.net/6'
+});
+
 /**
  * @class Handler
  */
