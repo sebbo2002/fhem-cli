@@ -120,7 +120,7 @@ Now, FHEM CLI should restart Homebridge when any `room` or any `homebridgeMappin
 
 I use a private [Sentry instance]() to which unhandled errors of this script are reported. The reported data will only
 be used to fix the bug in a future version. Reporting can be disabled by setting the environment variable `SENTRY_DSN`
-to a different sentry instance or an invalid URL.
+to an empty string (`SENTRY_DSN="""`).
 
 
 ## 👨‍🔧 Copyright and license
