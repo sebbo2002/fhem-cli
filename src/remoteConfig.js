@@ -42,7 +42,14 @@ class RemoteConfig {
             }
 
             device.setDefinition([j.Internals.TYPE, def].join(' ').trim().replace(/\n/g, '\\\n'));
-            Object.entries(j.Attributes).forEach(([name, value]) => device.setAttribute(name, value));
+            Object.entries(j.Attributes).forEach(([name, value]) => {
+                if(name === 'userReadings') {
+                    value = value
+                        .replace(/;/g, ';;')
+                        .replace(/\n/g, '\\\n');
+                }
+                device.setAttribute(name, value)
+            });
 
             this._devices[j.Name] = device;
         });
