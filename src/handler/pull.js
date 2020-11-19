@@ -68,7 +68,7 @@ class PullHandler {
             console.log(`\n#### ${c.file}`);
 
             const prefix = c.type === 'remove' ? '- ' : '+ ';
-            console.log(prefix + c.content.replace(/\n/g, '\n' + prefix));
+            console.log(prefix + (c.content ? c.content.replace(/\n/g, '\n' + prefix) : ''));
         });
 
         console.log('');
