@@ -93,7 +93,8 @@ class RemoteConfig {
                 errors.push(err);
             }
 
-            if(response) {
+            const responseHasContent = !!response.split('>').map(s => s.trim()).join('');
+            if(responseHasContent) {
                 errors.push(new Error('Unable to apply this command: `' + command + '` - FHEM answered: `' + response + '`'));
             }
         }
