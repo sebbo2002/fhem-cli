@@ -1,0 +1,4 @@
+/.github
+/node_modules/
+/dist/test/
+/release.config.js
