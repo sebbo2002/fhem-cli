@@ -31,14 +31,17 @@
     "@semantic-release/github": "^7.2.0",
     "@semantic-release/npm": "^7.0.8",
     "@semantic-release/release-notes-generator": "^9.0.1",
-    "eslint": "^7.2.0",
+    "eslint": "^7.13.0",
     "npm-check": "^5.9.2",
     "semantic-release": "^17.2.4"
   },
   "dependencies": {
-    "@sentry/node": "^5.16.1",
-    "commander": "^5.1.0",
-    "inquirer": "^7.1.0",
-    "ora": "^4.0.4"
+    "@sentry/node": "^5.27.4",
+    "commander": "^6.2.0",
+    "inquirer": "^7.3.3",
+    "ora": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }
