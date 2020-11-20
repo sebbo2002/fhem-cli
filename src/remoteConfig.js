@@ -48,7 +48,7 @@ class RemoteConfig {
                         .replace(/;/g, ';;')
                         .replace(/\n/g, '\\\n');
                 }
-                device.setAttribute(name, value)
+                device.setAttribute(name, value);
             });
 
             this._devices[j.Name] = device;

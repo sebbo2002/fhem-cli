@@ -2,12 +2,7 @@
   "name": "@sebbo2002/fhem-cli",
   "description": "My small toolbox I use do configure and manage FHEM…",
   "scripts": {
-    "all": "npm run check",
-    "check": "npm run check:eslint && npm run check:npm",
-    "check:eslint": "eslint ./src",
-    "check:quick": "npm run check:eslint",
-    "check:npm": "npm-check -s -p",
-    "bump": "jq -M \".version=\\\"$CI_COMMIT_TAG\\\"\" package.json|sponge package.json"
+    "lint": "eslint ./src"
   },
   "bin": {
     "fhem": "./bin/fhem"
