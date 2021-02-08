@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/sebbo2002/fhem-cli#readme",
   "devDependencies": {
-    "eslint": "^7.2.0",
+    "eslint": "^7.18.0",
     "npm-check": "^5.9.2"
   },
   "dependencies": {
