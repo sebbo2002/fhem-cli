@@ -117,11 +117,17 @@ class LocalConfig {
             });
 
             let i = 0;
+
             reader.on('line', line => {
                 this._parseLine(file, line, i);
                 i += 1;
             });
             reader.on('close', () => {
+                if (this.parseBuffer.length > 0) {
+                    const lineDef = (this.parseBufferStart || i) + (this.parseBuffer.length > 1 ? '-' + (i - 1) : '');
+                    this._parseCommand(this.parseBuffer.join('\n'), file, lineDef);
+                }
+
                 resolve();
             });
         });
@@ -132,8 +138,36 @@ class LocalConfig {
             return;
         }
 
-        const complete = (this.parseBuffer.join('\n') + '\n' + line).trim();
-        const lines = complete.split('\n').length;
+        const isIndended = line.startsWith(' ') || line.startsWith('\t');
+        if (isIndended) {
+            this.parseBufferStart = this.parseBufferStart !== null ? this.parseBufferStart : i;
+            this.parseBuffer.push(line);
+            return;
+        }
+
+        const lineDef = (this.parseBufferStart || i) + (this.parseBuffer.length > 1 ? '-' + (i - 1) : '');
+        if (
+            this.parseBuffer.length > 0 && (
+                [')', '}', ']'].find(b => line.startsWith(b)) ||
+                this.parseBuffer[this.parseBuffer.length - 1].trim().endsWith('\n')
+            )
+        ) {
+            this._parseCommand(this.parseBuffer.join('\n') + '\n' + line, file, lineDef);
+            this.parseBufferStart = null;
+            this.parseBuffer = [];
+            return;
+        }
+
+        if (this.parseBuffer.length > 0) {
+            this._parseCommand(this.parseBuffer.join('\n'), file, lineDef);
+        }
+
+        this.parseBufferStart = i;
+        this.parseBuffer = [line];
+    }
+
+    _parseCommand (cmd, file, lineDef) {
+        const complete = cmd.trim();
         const parts = complete.split(' ');
         const command = parts.shift();
 
@@ -141,14 +175,6 @@ class LocalConfig {
             return;
         }
 
-        const brakets = ['(', ')', '[', ']', '{', '}'].map(b => complete.split(b).length);
-        if (brakets[0] !== brakets[1] || brakets[2] !== brakets[3] || brakets[4] !== brakets[5] || line.trim().substr(-1) === '\\') {
-            this.parseBufferStart = this.parseBufferStart !== null ? this.parseBufferStart : i;
-            this.parseBuffer.push(line);
-            return;
-        }
-
-        const lineDef = (this.parseBufferStart || i) + (lines > 1 ? '-' + ((this.parseBufferStart || i) + lines) : '');
         this.parseBufferStart = null;
         this.parseBuffer = [];
 
@@ -162,7 +188,7 @@ class LocalConfig {
             // ignore sets for now
         }
         else {
-            throw new Error('Unable to parse line: `' + line + '` in ' + file + ':' + lineDef);
+            throw new Error('Unable to parse command: `' + cmd + '` in ' + file + ':' + lineDef);
         }
     }
 

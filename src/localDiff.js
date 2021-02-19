@@ -27,11 +27,12 @@ class LocalDiff {
         this.remote.forEach(remoteDevice => {
             const path = require('path');
             const localDevice = this.local.find(d => d.getName() === remoteDevice.getName());
-            let fileName;
 
-            // Device not given in local config.
-            // add device and all attributes…
-            if (!localDevice) {
+            let fileName;
+            if(localDevice) {
+                fileName = localDevice.getLine();
+            }
+            if (!fileName) {
                 fileName = path.resolve(
                     this.cwd,
                     (
@@ -46,15 +47,17 @@ class LocalDiff {
                         .replace(/ä/g, 'ae')
                         .replace(/[^0-9a-z-_.]/g, '') + '.cfg'
                 );
+            }
 
+            // Device not given in local config.
+            // add device and all attributes…
+            if (!localDevice) {
                 this.diff.push({
                     type: 'add',
                     content: '\ndefmod ' + remoteDevice.getName() + ' ' + remoteDevice.getDefinition(),
                     file: fileName
                 });
             } else {
-                fileName = localDevice.getLine();
-
                 // device found, but definition is not up to date
                 if (remoteDevice.getDefinition() !== localDevice.getDefinition()) {
                     this.diff.push({
@@ -74,15 +77,16 @@ class LocalDiff {
                     this.diff.push({
                         type: 'add',
                         content: 'attr ' + remoteDevice.getName() + ' ' + name + ' ' + value[0],
-                        file: localDevice ? localDevice.getAttibute(
+                        file: localDevice && Object.keys(localDevice.getAttibutes()).length ? localDevice.getAttibute(
                             Object.keys(localDevice.getAttibutes())[Object.keys(localDevice.getAttibutes()).length - 1]
                         )[1] : fileName
                     });
                 }
-                else if (localAttr[0] !== value[0]) {
+                else if (this.trimWhitespaces(localAttr[0]) !== this.trimWhitespaces(value[0])) {
                     this.diff.push({
                         type: 'update',
-                        content: 'attr ' + remoteDevice.getName() + ' ' + name + ' ' + value[0],
+                        content: 'attr ' + remoteDevice.getName() + ' ' + name + ' ' +
+                            value[0].split('\n').map(l => '  ' + l.trim()).join('\n'),
                         file: localAttr[1]
                     });
                 }
@@ -120,6 +124,9 @@ class LocalDiff {
                 });
             });
         });
+    }
+    trimWhitespaces(str) {
+        return str.split('\n').map(s => s.trim()).join('\n');
     }
 }
 

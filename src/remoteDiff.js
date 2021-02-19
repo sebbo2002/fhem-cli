@@ -57,7 +57,7 @@ class RemoteDiff {
             Object.entries(localDevice.getAttibutes()).forEach(([name, value]) => {
                 const remoteAttr = remoteDevice ? remoteDevice.getAttibute(name) : null;
 
-                if (!remoteAttr || remoteAttr[0] !== value[0]) {
+                if (!remoteAttr || !this.compareAttr(remoteAttr[0], value[0])) {
                     this.diff.push({
                         type: !remoteAttr ? 'add' : 'update',
                         content: 'attr ' + localDevice.getName() + ' ' + name + ' ' + value[0]
@@ -102,6 +102,10 @@ class RemoteDiff {
                 }
             });
         });
+    }
+
+    compareAttr(a, b) {
+        return a.split('\n').map(l => l.trim()).join('\n') === b.split('\n').map(l => l.trim()).join('\n');
     }
 }
 
